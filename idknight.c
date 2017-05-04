@@ -102,6 +102,7 @@ int knightAStar(int row, int column, int rowGoal, int columnGoal, int heuristic)
 		row = position.row;
 		column = position.column;
 		if (isGoal(row, column, rowGoal, columnGoal)){
+			free(q.array);
 			return position.pathlen;
 		}
 		//printf("position is %d %d goal is %d %d\n", row, column, rowGoal, columnGoal);
@@ -121,6 +122,7 @@ int knightAStar(int row, int column, int rowGoal, int columnGoal, int heuristic)
 			}
 		}
 	}
+	free(q.array);
 	return 0;
 }
 void IDS(int x0, int y0, int x1, int y1){
