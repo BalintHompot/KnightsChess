@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{language=C,
+  numbers=left,
+  stepnumber=1,    
+  firstnumber=1,
+  numberfirstline=true
+  aboveskip=5mm,
+  belowskip=5mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true
+  tabsize=3
+}
+
+\title{Artificial Intelligence 1 \\ Lab 1}%Update the lab (assignment number)
+\author{Name1 (student number 1) \& Name2 (student number 2) \\ Group name} %Change the names and fill in the student numbers and the group name (AI1/AI2/CS1 etc)
+\date{day-month-year}%Update the date
+
+\begin{document}
+
+\maketitle
+
+\section*{Theory}
+\subsection*{Exercise 1}
+%Your answers for the theoretical questions go here
+
+\subsection*{Exercise 2}
+%Your answers for the theoretical questions go here
+
+
+\section*{Programming} 
+%The programming part follows the same template used during ADinC and Imperative Programming
+\subsection*{Program description}
+
+The program is used to calculate the shortest path on a 500*500 chess table from a field to another field, both asked in the input. The path is calculated on the way the knight is moving. The program can use IDS and A* search methods, with 2 heuristics for the latter: the straight line distance from goal, and the minimal number of steps that is needed to reach the goal.
+
+\subsection*{Problem analysis}
+
+The task was to implement an A* search with two different heuristics, since the IDS was already implemented. We also programmed an easy way to compare solution methods with being able to chose running both modes and both heuristics after each other.
+
+\subsection*{Program design}
+The implementation of A* can be found in the knightAStar function. It uses the heap implementation of a priority queue based BFS, but the priority is calculated on the heuristic method, taken as a user imput, and calculated in the heuristicFunction function. The matrix costShortestPath is used to store the lowest estimated total cost (path + heuristic) for all states, and we only enque the states, that give lower estimated total cost for the fields than the one already stored in the matrix (set to infinity at start). The program checks for solution when dequeueing from the heap.
+\\
+\\
+We implemented two heuristic functions for the A*: The first one calculates the straight line distance based on the pythagorean theorem, and divides it by the square root of 5 to keep the admissibility, since one steps in the solution contributes to $sqrt(5)$ in distance.
+\\
+The other adds takes the absolute value of the difference of the row and column value from the goal row and column, and divides it with three, calculating the minimum steps that is needed to find the goal, since a horse takes three steps in one turn (two horizontally, one vertically, or the other way around). This fulfills the heuristic criteria.
+\\
+Both heuristic are rounded to integers for simplicity, since it does not break the admissibility. As expected, in general the first one gives faster solution, since it also helps finding a direction, whereas the other one might go in wrong ways, just because the added absolute distance of rows and columns is decreasing. The branching factor for the distance heuristic is between 1 and 1.18, for the minSteps heuristic between 1 and 1.2, calculated on the 0 42 case. This also suggests, that the first one is better. Both perform significantly better than the blind search.
+
+\subsection*{Program evaluation}
+
+The program is running with no memory leaks. The complexity depends on the mode: for the IDS method the time complexity is $O(4^d)$, where d is the solution depth and the memory complexity is O(4d) (same as O(d)). For the A*, the complexity depends on the heuristic's effective branching factor. Since the heuristics' effective branching factor is close to 1, the time complexity is close to O(d), and the memory complexity is close to O(4d), where d is the solution depth.
+
+\subsection*{Program output}
+The program outputs the shortest path with a knight between two fields on the chess table, and the method that was used. It also outputs the visited nodes in IDS and the enqueued and dequeued nodes in A*, to see how optimal the algorithm is.
+
+\subsection*{Program files}
+%copy code files into listings using the \begin{listing} command as follows:
+\subsubsection*{idknight.c}
+\lstinputlisting{idknight.c}
+\subsubsection*{heap.c}
+\lstinputlisting{heap.c}
+\subsubsection*{heap.}
+\lstinputlisting{heap.h}
+
+\end{document}
